@@ -1,0 +1,12 @@
+{
+  "name": "presence-selenium",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Surveillance du dialogue de présence avec Selenium",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node presence.cjs",
+    "test": "node self-test.cjs"
+  },
+  "dependencies": { "selenium-webdriver": "^4.27.0" }
+}
