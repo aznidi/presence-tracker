@@ -10,15 +10,26 @@ function log(message) {
 }
 
 // Rechercher l'élément à chaque passage : il peut bouger ou être recréé.
-async function confirmIfReady(driver) {
+async function findReadyButton(driver) {
   const buttons = await driver.findElements(By.css(BUTTON));
   for (const button of buttons) {
     if (!(await button.isDisplayed()) || !(await button.isEnabled())) continue;
-    // Clic Selenium normal : respecte disabled et les gestionnaires du site.
-    await button.click();
-    return true;
+    return button;
   }
-  return false;
+  return null;
+}
+
+async function confirmIfReady(driver, shouldStop = () => false) {
+  if (!(await findReadyButton(driver))) return false;
+
+  const delayMs = 1000 + Math.floor(Math.random() * 2001);
+  await new Promise(resolve => setTimeout(resolve, delayMs));
+  if (shouldStop()) return false;
+ 
+  const button = await findReadyButton(driver);
+  if (!button) return false;
+  await button.click();
+  return true;
 }
 
 function isTransient(errorValue) {
@@ -43,7 +54,7 @@ async function watch(driver, shouldStop = () => false) {
           count += 1;
           log(`Dialogue fermé après clic (${count}).`);
         }
-      } else if (await confirmIfReady(driver)) {
+      } else if (await confirmIfReady(driver, shouldStop)) {
         pendingClose = true;
         log('Bouton de présence cliqué ; attente de fermeture du dialogue.');
       }

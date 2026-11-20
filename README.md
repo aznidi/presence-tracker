@@ -22,7 +22,9 @@ Elle ne recharge pas la page. Une interruption réseau doit être résolue dans
 le navigateur ; le script ne peut pas garantir la réception des dialogues hors ligne.
 
 Le script détecte `dialog#check[open] button#confirm`, attend qu'il soit visible
-et activé, puis effectue un clic Selenium. La position n'est pas codée en dur.
+et activé, attend un délai aléatoire de 1 à 3 secondes, puis revérifie le bouton
+avant d'effectuer un clic Selenium. Cette pause garde une marge sur le délai
+de réponse de 10 secondes. La position n'est pas codée en dur.
 Si le bouton bouge pendant le clic, il est recherché à nouveau. Le script attend
 la fermeture avant de traiter un nouveau dialogue. Le journal constate cette
 fermeture, sans prétendre vérifier l'enregistrement côté serveur.
